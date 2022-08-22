@@ -14,6 +14,7 @@ class StudentUser extends NewUser{
     private $password;
     private $provider_id;
     private $provider_name;
+    private $roleId = 1;
 
     public function __construct($name, $email, $password, $provider_id = null, $provider_name = null){
         $this->name =  $name;
@@ -34,6 +35,7 @@ class StudentUser extends NewUser{
             ]);
 
             $token = Self::generateAccessToken($newUser);
+            $newUser->roles()->attach($this->roleId);
 
             return $token;
      }

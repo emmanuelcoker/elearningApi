@@ -16,6 +16,7 @@ class InstructorUser extends NewUser{
     public $website_link;
     public $twitter_link;
     public $linkedin_link;
+    private $roleId = 2;
 
     public function __construct($sub_title, $about, $website_link = null, $twitter_link = null, $youtube_link = null, $linkedin_link = null){
         $this->sub_title = $sub_title;
@@ -38,10 +39,7 @@ class InstructorUser extends NewUser{
                 'linkedin_link' => $this->linkedin_link,
             ]);
 
-            //update user Role
-            $user =  User::findOrFail(auth()->user()->id);
-            $user->role_id = 2;
-            $user->save();
+            auth()->user()->roles()->attach($this->roleId);
             return $newInstructor;
      }
 

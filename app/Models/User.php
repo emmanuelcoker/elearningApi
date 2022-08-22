@@ -46,7 +46,7 @@ class User extends Authenticatable
     //user role relationship
     public function roles()
     {
-        return $this->belongsToMany(Role::class)->using(RolesUser::class)->as('roles');
+        return $this->belongsToMany(Role::class, 'roles_users')->as('roles')->using(RolesUser::class);
     }
 
     //relationship with instructor model

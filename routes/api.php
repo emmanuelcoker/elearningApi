@@ -21,10 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('json.response')->group(function(){
+    //Unauthenticated Routes
     Route::post('/register',                          [AuthController::class, 'register']);
     Route::post('/login',                             [AuthController::class, 'login']);
     
-    
+    //Authenticated Routes
     Route::middleware('auth:sanctum')->group(function(){
         Route::post('/instructor/onboarding',             [InstructorController::class, 'store']);
     });
