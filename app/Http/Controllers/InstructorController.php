@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\NewInstructorRequest;
 use App\Services\UserManagementServices\InstructorUser;
 use App\Services\MyResponseFormatter;
+use App\Http\Resources\InstructorUserResource;
 
 class InstructorController extends Controller
 {
@@ -17,7 +18,10 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        //
+        //get all instructors and their profiles
+        $instructors = Instructor::latest()->paginate(40);
+        return MyResponseFormatter::dataResponse(InstructorUserResource::collection($instructors));       
+
     }
 
     /**
@@ -48,7 +52,8 @@ class InstructorController extends Controller
      */
     public function show(Instructor $instructor)
     {
-        //
+        //show instructor profile
+        return MyResponseFormatter::dataResponse( new InstructorUserResource($instructor));
     }
 
     /**
@@ -58,9 +63,14 @@ class InstructorController extends Controller
      * @param  \App\Models\Instructor  $instructor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Instructor $instructor)
+    public function update(NewInstructorRequest $request)
     {
-        //
+        //validate request
+        $request->validated();
+        $data = $request->only('about', 'sub_title', 'website_link', 'twitter_link', 'youtube_link', 'linkedin_link');
+        $instructor = new InstructorUser();
+        $resp = $instructor->updateUser($data);
+        return MyResponseFormatter::messageResponse($resp);
     }
 
     /**

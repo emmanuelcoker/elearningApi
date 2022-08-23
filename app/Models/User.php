@@ -59,4 +59,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class)->using(CourseUser::class)->as('courses');
     }
+    
 }
