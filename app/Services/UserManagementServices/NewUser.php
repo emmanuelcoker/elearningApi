@@ -7,7 +7,7 @@ abstract class NewUser{
     abstract function createUser();
 
     //update user
-    abstract function updateUser();
+    abstract function updateUser($data);
 
     //delete
     abstract function deleteUser();

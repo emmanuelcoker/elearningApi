@@ -18,7 +18,7 @@ class InstructorUser extends NewUser{
     public $linkedin_link;
     private $roleId = 2;
 
-    public function __construct($sub_title, $about, $website_link = null, $twitter_link = null, $youtube_link = null, $linkedin_link = null){
+    public function __construct($sub_title = null, $about = null, $website_link = null, $twitter_link = null, $youtube_link = null, $linkedin_link = null){
         $this->sub_title = $sub_title;
         $this->about = $about;
         $this->website_link = $website_link;
@@ -44,9 +44,11 @@ class InstructorUser extends NewUser{
      }
 
 
-     //update user
-     public function updateUser(){
-
+     //update user instructor profile
+     public function updateUser($data){
+        //check if the user has the role
+        auth()->user()->instructor_profile()->update($data);
+        return 'Profile Updated Successfully';
      }
  
      //delete

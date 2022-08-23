@@ -16,8 +16,8 @@ use App\Http\Controllers\InstructorController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return auth()->user();
+Route::middleware('auth:sanctum')->get('/user', function (Request $request){
+    return auth()->user()->roles;
 });
 
 Route::middleware('json.response')->group(function(){
@@ -27,7 +27,12 @@ Route::middleware('json.response')->group(function(){
     
     //Authenticated Routes
     Route::middleware('auth:sanctum')->group(function(){
+
+        //instructors routes
+        Route::get('/instructor', [InstructorController::class, 'index']);
         Route::post('/instructor/onboarding',             [InstructorController::class, 'store']);
+        Route::get('/instructor/{instructor}',          [InstructorController::class, 'show']);
+        Route::put('/instructor',   [InstructorController::class, 'update']);
     });
 });
 
