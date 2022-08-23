@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\CourseCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +30,22 @@ Route::middleware('json.response')->group(function(){
     Route::middleware('auth:sanctum')->group(function(){
 
         //instructors routes
-        Route::get('/instructor', [InstructorController::class, 'index']);
-        Route::post('/instructor/onboarding',             [InstructorController::class, 'store']);
-        Route::get('/instructor/{instructor}',          [InstructorController::class, 'show']);
-        Route::put('/instructor',   [InstructorController::class, 'update']);
+        Route::prefix('/instructor')->group(function(){
+            Route::get('/',                        [InstructorController::class, 'index']);
+            Route::post('/onboarding',             [InstructorController::class, 'store']);
+            Route::get('/{instructor}',            [InstructorController::class, 'show']);
+            Route::put('/',                        [InstructorController::class, 'update']);
+        });
+        
+
+        //course Category Routes
+        Route::prefix('/category')->group(function(){
+            Route::get('/',                         [CourseCategoryController::class, 'index']);
+            Route::post('/',                        [CourseCategoryController::class, 'store']);
+            Route::get('/{category}',               [CourseCategoryController::class, 'show']);
+            Route::put('/{category}',               [CourseCategoryController::class, 'update']);
+            Route::delete('/{id}',                     [CourseCategoryController::class, 'delete']);
+        });
     });
 });
 
