@@ -3,6 +3,7 @@
 namespace App\Services\CourseManagementServices\CourseCategory;
 
 use App\Services\CourseManagementServices\CourseCategory\NewCategory;
+use App\Services\FileUploadServices\UploadService;
 use App\Models\CourseCategory;
 
 
@@ -29,11 +30,12 @@ class NewCourseCategory extends NewCategory
     {
         
         //upload file image
-        $imageFile = parent::uploadImage($this->banner_img);
+        $imageFile = new UploadService($this->banner_img);
+        $imageHashName = $imageFile->uploadFile();
 
         $newcategory = CourseCategory::firstOrCreate([
             'category_name' => $this->category_name,
-            'banner_img' => $imageFile,
+            'banner_img' => $imageHashName,
             'info' => $this->info,
         ]);
 
@@ -52,7 +54,8 @@ class NewCourseCategory extends NewCategory
     {
         try {
             $category = CourseCategory::findOrFail($categoryId);
-            $imageFile = parent::deleteImage($category->banner_img);
+            $imageFile = new UploadService($category->banner_img);
+            $imageFile->deleteFile();
             $category->delete();
             return 'Category Deleted Successfully';
         } catch (\Throwable $th) {
