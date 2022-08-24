@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\CourseManagementServices\CourseCategory\NewCourseCategory;
+use App\Services\FileUploadServices\UploadService;
 use App\Http\Requests\NewCourseCategoryRequest;
 use App\Http\Requests\UpdateCourseCategoryRequest;
 use App\Http\Resources\CourseCategoryResource;
@@ -35,15 +36,33 @@ class CourseCategoryController extends Controller
         return MyResponseFormatter::dataResponse(new CourseCategoryResource($category));
     }
 
+
+
     public function update(UpdateCourseCategoryRequest $request, $id){
-        $request->validated();
-        if(count($request->all()) >= 1){
-            $data = $request->only('category_name', 'banner_img', 'info');
-            $category = new NewCourseCategory();
-            $resp = $category->updateCategory($id, $data);
-            return MyResponseFormatter::messageResponse($resp);
+    
+        try {
+            $request->validated();
+
+            if(count($request->all()) >= 1){        
+                $category = new NewCourseCategory();
+                $findCategory = CourseCategory::find($id);
+                $uploadService = new UploadService($findCategory->banner_img);
+
+                //update image banner
+                if($request->hasFile('banner_img')){
+                    //parameters of the method: model, old image , new image
+                    $uploadService->updateImg($findCategory, $request->banner_img);
+                }
+    
+                $resp = $category->updateCategory($id, $request->only('category_name', 'info'));
+                return MyResponseFormatter::messageResponse($resp);
+            }
+
+            return MyResponseFormatter::messageResponse('Empty Request Sent', 204);
+
+        } catch (\Throwable $th) {
+            throw $th;
         }
-        return MyResponseFormatter::messageResponse('Empty Request Sent', 204);
        
     }
 

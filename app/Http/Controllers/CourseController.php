@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Http\Requests\NewCourseRequest;
+use App\Services\Courses\NewCourse;
 
 class CourseController extends Controller
 {
@@ -23,9 +25,23 @@ class CourseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewCourseRequest $request)
     {
-        //
+        //validate request
+        $request->validate();
+        return $request;
+        try {
+           
+            $data = $request->only('description', 'title', 'audience', 'start_day',
+                                'end_day', 'requirements','prerequisites', 'pricing', 
+                                'banner_img', 'course_category_id');
+            
+            $newCourse = new NewCourse($data);
+            $course = $newCourse->createCourse();
+            return MyResponseFormatter::dataResponse($course, 'Course Created Successfully', 201);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**

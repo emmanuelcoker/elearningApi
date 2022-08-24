@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\CourseCategoryController;
+use App\Http\Controllers\CourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +44,18 @@ Route::middleware('json.response')->group(function(){
             Route::get('/',                         [CourseCategoryController::class, 'index']);
             Route::post('/',                        [CourseCategoryController::class, 'store']);
             Route::get('/{category}',               [CourseCategoryController::class, 'show']);
-            Route::put('/{category}',               [CourseCategoryController::class, 'update']);
-            Route::delete('/{id}',                     [CourseCategoryController::class, 'delete']);
+            Route::post('/{category}',              [CourseCategoryController::class, 'update']);
+            Route::delete('/{id}',                  [CourseCategoryController::class, 'delete']);
+        });
+
+        
+        //course Routes
+        Route::prefix('/course')->group(function(){
+            Route::get('/',                         [CourseController::class, 'index']);
+            Route::post('/',                        [CourseController::class, 'store']);
+            Route::get('/{course}',                 [CourseController::class, 'show']);
+            Route::post('/{course}',                [CourseController::class, 'update']);
+            Route::delete('/{id}',                  [CourseController::class, 'delete']);
         });
     });
 });

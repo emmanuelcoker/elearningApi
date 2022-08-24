@@ -38,6 +38,22 @@ class UploadService
 
     }
 
+
+    //updating an existing image
+       //update category image
+    public function updateImg($model, $newImage){
+
+            //delete old image
+            $imageHashName = Self::deleteFile();
+
+            //upload new file image
+            $imageFile     = new UploadService($newImage);
+            $imageHashName = $imageFile->uploadFile();
+            $model->update(['banner_img' => $imageHashName]);
+
+    }
+
+
     public function deleteFile($path = 'img/'){
 
         try {
