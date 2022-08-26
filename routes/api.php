@@ -55,7 +55,7 @@ Route::middleware('json.response')->group(function(){
             Route::post('/',                        [CourseController::class, 'store']);
             Route::get('/{course}',                 [CourseController::class, 'show']);
             Route::post('/{course}',                [CourseController::class, 'update']);
-            Route::delete('/{id}',                  [CourseController::class, 'delete']);
+            Route::delete('/{course}',              [CourseController::class, 'destroy']);
         });
     });
 });

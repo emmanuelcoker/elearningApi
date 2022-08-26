@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Requests\NewCourseRequest;
-use App\Services\Courses\NewCourse;
+use App\Services\CourseManagementServices\Courses\NewCourse;
+use App\Services\FileUploadServices\UploadService;
+use App\Services\MyResponseFormatter;
 
 class CourseController extends Controller
 {
@@ -28,8 +30,7 @@ class CourseController extends Controller
     public function store(NewCourseRequest $request)
     {
         //validate request
-        $request->validate();
-        return $request;
+        $request->validated();
         try {
            
             $data = $request->only('description', 'title', 'audience', 'start_day',
@@ -52,7 +53,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        return MyResponseFormatter::dataResponse($course);
     }
 
     /**
@@ -62,9 +63,23 @@ class CourseController extends Controller
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Course $course)
+    public function update(NewCourseRequest $request, Course $course)
     {
-        //
+        $request->validated();
+        $uploadService = new UploadService($course->banner_img);
+
+        //update image banner
+        if($request->hasFile('banner_img')){
+            //parameters of the method: model, old image , new image
+            $uploadService->updateImg($course, $request->banner_img);
+        }
+    
+        $course->update($request->only(
+            'description', 'title', 'audience', 'start_day', 'end_day', 'requirements', 
+            'prerequisites','pricing', 'banner_img', 'course_category_id'
+        ));
+
+        return MyResponseFormatter::messageResponse('Course Updated Successfully!');
     }
 
     /**
@@ -74,7 +89,10 @@ class CourseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Course $course)
-    {
-        //
+    {   
+        $uploadService = new UploadService($course->banner_img);
+        $uploadService->deleteFile();
+        $course->delete();
+        return MyResponseFormatter::messageResponse('Course Deleted Successfully!');
     }
 }

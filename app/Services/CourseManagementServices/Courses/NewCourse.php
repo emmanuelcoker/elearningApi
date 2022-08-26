@@ -44,7 +44,7 @@ class NewCourse
                 'description'               =>    $this->description,
                 'title'                     =>    $this->title,
                 'audience'                  =>    $this->audience,
-                'start_day'                 =>    $this->start_day,
+                'starting_day'              =>    $this->start_day,
                 'end_day'                   =>    $this->end_day,
                 'requirements'              =>    $this->prerequisites,
                 'prerequisites'             =>    $this->requirements,

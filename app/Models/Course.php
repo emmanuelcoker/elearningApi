@@ -14,7 +14,7 @@ class Course extends Model
         'description',
         'title',
         'audience',
-        'start_day',
+        'starting_day',
         'end_day',
         'requirements',
         'prerequisites',
@@ -25,5 +25,9 @@ class Course extends Model
 
     public function category(){
         return $this->belongsTo(CourseCategory::class, 'course_category_id');
+    }
+
+    public function curricula(){
+        return $this->hasMany(CourseCurriculum::class, 'course_id')->orderBy('curriculum_number');
     }
 }

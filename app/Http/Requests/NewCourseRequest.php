@@ -27,12 +27,12 @@ class NewCourseRequest extends FormRequest
             'description'        => 'required',
             'title'              => 'required',
             'audience'           => 'required',
-            'start_day'          => 'required',
-            'end_day'            => 'required',
+            'start_day'          => 'required|date',
+            'end_day'            => 'required|date',
             'requirements'       => 'required',
             'prerequisites'      => 'required',
-            'pricing'            => 'required',
-            'banner_img'         => 'required',
+            'pricing'            => 'required|numeric',
+            'banner_img'         => 'nullable|image:jpeg,jpg,png',
             'course_category_id' => 'required'
         ];
     }
