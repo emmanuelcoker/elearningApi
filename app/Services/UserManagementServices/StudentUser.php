@@ -42,7 +42,7 @@ class StudentUser extends NewUser{
 
 
      //update user
-     public function updateUser(){
+     public function updateUser($data){
 
      }
  

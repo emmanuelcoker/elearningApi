@@ -28,6 +28,6 @@ class Course extends Model
     }
 
     public function curricula(){
-        return $this->hasMany(CourseCurriculum::class, 'course_id')->orderBy('curriculum_number');
+        return $this->hasMany(CourseCurriculum::class, 'course_id')->orderBy('curriculum_number')->withDefault();
     }
 }

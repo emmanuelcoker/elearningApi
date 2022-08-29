@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\CourseCategoryController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseCurriculumController;
+use App\Http\Controllers\CourseContentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +21,7 @@ use App\Http\Controllers\CourseController;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request){
-    return auth()->user()->roles;
+    return auth()->user();
 });
 
 Route::middleware('json.response')->group(function(){
@@ -56,6 +58,25 @@ Route::middleware('json.response')->group(function(){
             Route::get('/{course}',                 [CourseController::class, 'show']);
             Route::post('/{course}',                [CourseController::class, 'update']);
             Route::delete('/{course}',              [CourseController::class, 'destroy']);
+        });
+
+         //course curriculum Routes
+         Route::prefix('/curriculum')->group(function(){
+            Route::get('/',                             [CourseCurriculumController::class, 'index']);
+            Route::post('/',                            [CourseCurriculumController::class, 'store']);
+            Route::get('/{curriculum}',                 [CourseCurriculumController::class, 'show']);
+            Route::post('/{curriculum}',                [CourseCurriculumController::class, 'update']);
+            Route::delete('/{curriculum}',              [CourseCurriculumController::class, 'destroy']);
+        });
+
+        //course content Routes
+        
+        Route::prefix('/uploads')->group(function(){
+            Route::get('/',                                 [CourseContentController::class, 'index']);
+            Route::post('/',                                [CourseContentController::class, 'store']);
+            Route::get('/{contentable_id}',                 [CourseContentController::class, 'show']);
+            Route::post('/{contentable_id}',                [CourseContentController::class, 'update']);
+            Route::delete('/{contentable_id}',              [CourseContentController::class, 'destroy']);
         });
     });
 });

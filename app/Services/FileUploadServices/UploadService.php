@@ -54,15 +54,75 @@ class UploadService
     }
 
 
+
+    //update video 
+    public function updateVideo($model, $newVideo){
+
+        //delete old image
+        $videoHashName = Self::deleteFile('videos/');
+
+        //upload new file image
+        $videoFile     = new UploadService($newVideo);
+        $extension = $videoFile->getExtension();
+        $videoHashName = $videoFile->uploadFile('/videos');
+        $model->update(['video_name' => $videoHashName, 'video_type' => $extension]);
+        return ['videoHashName' => $videoHashName, 'extension' => $extension];
+    }
+
+
+    //update video 
+    public function updateDoc($model, $newdoc){
+
+        //delete old image
+        $docHashName = Self::deleteFile('documents/');
+
+        //upload new file image
+        $docFile     = new UploadService($newdoc);
+        $extension = $docFile->getExtension();
+        $docHashName = $docFile->uploadFile('/documents');
+        $model->update(['filename' => $docHashName, 'filetype' => $extension]);
+        return ['docHashName' => $docHashName, 'extension' => $extension];
+
+    }
+
+
     public function deleteFile($path = 'img/'){
 
         try {
-            $imagePath = public_path($path.$this->file);
-            if(File::exists($imagePath)){
-                unlink($imagePath);
+            $filePath = public_path($path.$this->file);
+            if(File::exists($filePath)){
+                unlink($filePath);
             } 
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    //check file extension 
+    public function getExtension(){
+        $extension = $this->file->extension();
+        return $extension;
+    }
+
+    public function checkFileType(){
+        $extension = $this->file->extension();
+
+        $videoTypes     = ['flv','mp4','mkv','m3u8','avi','mov','ts','wmv'];
+        $documentTypes  = ['csv','txt','xlx','xls','pdf','doc','docx','ppt','flv'];
+        $imageTypes     = ['png','jpg', 'jpeg', 'tiff'];
+
+
+        //check for video
+        if(in_array($extension, $videoTypes)){
+            return 'video';
+        }
+
+        if(in_array($extension, $documentTypes)){
+            return 'document';
+        }
+
+        if(in_array($extension, $imageTypes)){
+            return 'image';
         }
     }
 }

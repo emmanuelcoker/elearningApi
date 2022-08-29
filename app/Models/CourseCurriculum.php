@@ -22,5 +22,8 @@ class CourseCurriculum extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function content(){
+        return $this->hasMany(CourseContent::class, 'curriculum_id');
+    }
     
 }
